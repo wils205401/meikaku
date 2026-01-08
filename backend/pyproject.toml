@@ -1,0 +1,11 @@
+[project]
+name = "meikaku-api"
+version = "0.1.0"
+description = "FastAPI backend for Meikaku"
+authors = [{ name = "Wilson Leung", email = "wilson.leung.2054@hotmail.com"}]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.128.0",
+    "ruff>=0.14.11",
+]
