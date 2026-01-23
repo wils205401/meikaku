@@ -7,5 +7,12 @@ class Base(DeclarativeBase):
     pass
 
 
-engine = create_engine(str(settings.DATABASE_URI))
-DBSession = sessionmaker(bind=engine, autoflush=True, autocommit=False)
+engine = create_engine(
+    str(settings.DATABASE_URI),
+    pool_pre_ping=True,  # avoids broken connections in long running containers
+)
+DBSession = sessionmaker(
+    bind=engine,
+    autoflush=True,
+    autocommit=False
+)
