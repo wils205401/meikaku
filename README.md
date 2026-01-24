@@ -19,3 +19,15 @@ Run the following command:
 ```bash
 ./setup.sh
 ```
+
+To start the service:
+
+```bash
+docker compose up -d
+```
+
+To connect to the postgres container:
+
+```bash
+docker exec -it postgres-db psql -U meikaku -d meikaku
+```
