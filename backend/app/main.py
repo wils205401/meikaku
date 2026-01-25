@@ -1,9 +1,16 @@
 import socket
 
+import os
+import debugpy
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
+
+if os.getenv("DEBUG", "false").lower() == "true":
+    debugpy.listen(("0.0.0.0", 5678))
+    print("Debugger listening on port 5678")
 
 app = FastAPI(title="Meikaku API")
 
