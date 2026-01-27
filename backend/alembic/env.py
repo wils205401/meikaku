@@ -1,3 +1,5 @@
+import os
+
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -30,7 +32,11 @@ target_metadata = Base.metadata
 # ... etc.
 
 
-def get_url():
+def get_database_url() -> str:
+    # Explicit override for tests
+    if "TEST_DATABASE_URL" in os.environ:
+        return os.environ["TEST_DATABASE_URL"]
+
     return str(settings.DATABASE_URI)
 
 
@@ -46,7 +52,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = get_url()
+    url = get_database_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -66,7 +72,7 @@ def run_migrations_online() -> None:
 
     """
     configuration = config.get_section(config.config_ini_section, {})
-    configuration["sqlalchemy.url"] = get_url()
+    configuration["sqlalchemy.url"] = get_database_url()
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",

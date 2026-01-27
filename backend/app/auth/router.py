@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from app.auth.dependencies import SessionDep
+from app.dependencies import SessionDep
 from app.auth.schemas import UserRegister, UserPublic, Token
 from app.core.security import create_access_token
 from typing import Any, Annotated
@@ -40,6 +40,6 @@ def login(
     )
 
     if not user:
-        raise HTTPException(status_code=400, details="Incorrect username or password.")
+        raise HTTPException(status_code=400, detail="Incorrect username or password.")
 
     return Token(access_token=create_access_token(user.id))
