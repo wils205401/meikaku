@@ -1,8 +1,7 @@
+import os
 import socket
 
-import os
 import debugpy
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -40,7 +39,7 @@ local_ip = get_local_ip()
 
 origins = [
     "http://localhost:8081",  # Expo Web
-    f"exp://{local_ip}:8081",  # expo go mobile metro bundler (dynamic local ip address + port)
+    f"exp://{local_ip}:8081",  # expo go mobile metro bundler (dynamic local ip address)
 ]
 
 app.add_middleware(

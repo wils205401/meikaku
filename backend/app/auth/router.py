@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.security import OAuth2PasswordRequestForm
-from app.dependencies import SessionDep
-from app.auth.schemas import UserRegister, UserPublic, Token
-from app.core.security import create_access_token
-from typing import Any, Annotated
+from typing import Annotated, Any
 
-from app.auth.service import get_user_by_email, register_user, authenticate_user
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+
+from app.auth.schemas import Token, UserPublic, UserRegister
+from app.auth.service import authenticate_user, get_user_by_email, register_user
+from app.core.security import create_access_token
+from app.dependencies import SessionDep
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
