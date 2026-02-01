@@ -1,20 +1,17 @@
 import os
-
-import pytest
-from testcontainers.postgres import PostgresContainer
-from alembic.config import Config
-from alembic import command
-
 from collections.abc import Generator
 
-from sqlalchemy.orm import Session
-from sqlalchemy.engine.base import Engine
-from sqlalchemy import create_engine
-
+import pytest
+from alembic.config import Config
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.engine.base import Engine
+from sqlalchemy.orm import Session
+from testcontainers.postgres import PostgresContainer
 
-from app.main import app
+from alembic import command
 from app.dependencies import get_db
+from app.main import app
 
 
 @pytest.fixture(scope="session")

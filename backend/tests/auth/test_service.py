@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from app.auth.schemas import UserRegister
 from app.auth import service as auth_service
+from app.auth.schemas import UserRegister
 
 
 def test_register_user(db_session: Session) -> None:

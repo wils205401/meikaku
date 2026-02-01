@@ -1,11 +1,11 @@
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-from app.models import User
-from app.core.security import verify_password
 from app.auth import service as auth_service
 from app.auth.schemas import UserRegister
+from app.core.security import verify_password
+from app.models import User
 
 
 class TestRegister:
@@ -135,7 +135,7 @@ class TestLogin:
         assert response.status_code == 400
         assert response.json()["detail"] == "Incorrect username or password."
 
-         # Case 2: Wrong password
+        # Case 2: Wrong password
         response = client.post(
             "/auth/login",
             data={"username": email, "password": "wrong_password"},
