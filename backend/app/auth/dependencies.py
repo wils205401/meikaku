@@ -9,7 +9,7 @@ from pydantic import ValidationError
 from app.auth.schemas import TokenPayload
 from app.core.config import settings
 from app.dependencies import SessionDep
-from app.models import User
+from app.users.models import User
 
 oath2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 

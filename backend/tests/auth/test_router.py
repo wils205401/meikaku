@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.auth import service as auth_service
 from app.auth.schemas import UserRegister
 from app.core.security import verify_password
-from app.models import User
+from app.users.models import User
 
 
 class TestRegister:

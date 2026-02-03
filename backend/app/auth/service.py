@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.auth.schemas import UserRegister
 from app.core.security import get_password_hash, verify_password
-from app.models import User
+from app.users.models import User
 
 
 def register_user(*, session: Session, user_register: UserRegister) -> User:
