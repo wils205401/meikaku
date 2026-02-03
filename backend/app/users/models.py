@@ -10,8 +10,9 @@ class User(
     TimestampMixin,
 ):
     email: Mapped[str] = mapped_column(
-        unique=True
-    )  # index created implicitly with unique = True
+        unique=True,
+        index=True,
+    )
     password_hash: Mapped[str]
 
     # TODO - add a is_verified for when user has completed email verification
