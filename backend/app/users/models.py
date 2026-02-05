@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 from app.models import TimestampMixin, UUIDPrimaryKeyMixin
@@ -14,6 +14,11 @@ class User(
         index=True,
     )
     password_hash: Mapped[str]
+
+    owned_workspaces: Mapped[list["Workspace"]] = relationship(  # noqa: F821
+        back_populates="owner",
+        cascade="all, delete-orphan",
+    )
 
     # TODO - add a is_verified for when user has completed email verification
 
