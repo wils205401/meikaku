@@ -37,3 +37,6 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
         )
 
     return user
+
+
+CurrentUser = Annotated[User, Depends(get_current_user)]
