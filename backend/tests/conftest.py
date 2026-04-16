@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 from testcontainers.postgres import PostgresContainer
 
 from alembic import command
+from app.auth.schemas import UserRegister
+from app.auth.service import register_user
 from app.dependencies import get_db
 from app.main import app
 
@@ -66,7 +68,7 @@ def db_session(engine: Engine) -> Generator[Session, None, None]:
     # Start a transaction
     transaction = connection.begin()
     # Bind a session to the connection
-    session = Session(bind=connection)
+    session = Session(bind=connection, join_transaction_mode="create_savepoint")
 
     try:
         yield session
@@ -95,3 +97,55 @@ def client(db_session: Session) -> Generator[TestClient, None, None]:
 
     # Clear override after test
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def user_a_token_headers(client: TestClient, db_session: Session) -> dict[str, str]:
+    """
+    Fixture for creating a login session with User A
+    """
+    user_a_email = "user_a@example.com"
+    user_a_password = "user_a_password"
+    # Create a user
+    user_register = UserRegister(
+        email=user_a_email,
+        password=user_a_password,
+    )
+    register_user(session=db_session, user_register=user_register)
+
+    # Login as the user and get token
+    login_data = {
+        "username": user_a_email,
+        "password": user_a_password,
+    }
+    response = client.post("/auth/login", data=login_data)
+    access_token = response.json()["access_token"]
+    header = {"Authorization": f"Bearer {access_token}"}
+
+    return header
+
+
+@pytest.fixture
+def user_b_token_headers(client: TestClient, db_session: Session) -> dict[str, str]:
+    """
+    Fixture for creating a login session with User A
+    """
+    user_b_email = "user_b@example.com"
+    user_b_password = "user_b_password"
+    # Create a user
+    user_register = UserRegister(
+        email=user_b_email,
+        password=user_b_password,
+    )
+    register_user(session=db_session, user_register=user_register)
+
+    # Login as the user and get token
+    login_data = {
+        "username": user_b_email,
+        "password": user_b_password,
+    }
+    response = client.post("/auth/login", data=login_data)
+    access_token = response.json()["access_token"]
+    header = {"Authorization": f"Bearer {access_token}"}
+
+    return header

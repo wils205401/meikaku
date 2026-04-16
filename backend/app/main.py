@@ -6,6 +6,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
+from app.exception_handlers import register_exception_handlers
+from app.workspaces.router import router as workspace_router
 
 if os.getenv("DEBUG", "false").lower() == "true":
     debugpy.listen(("0.0.0.0", 5678))
@@ -14,6 +16,8 @@ if os.getenv("DEBUG", "false").lower() == "true":
 app = FastAPI(title="Meikaku API")
 
 app.include_router(auth_router)
+app.include_router(workspace_router)
+register_exception_handlers(app)
 
 
 # Detect local IP dynamically

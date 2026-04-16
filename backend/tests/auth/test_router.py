@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from app.auth import service as auth_service
 from app.auth.schemas import UserRegister
 from app.core.security import verify_password
-from app.models import User
+from app.users.models import User
+from app.workspaces.models import Workspace
 
 
 class TestRegister:
@@ -78,6 +79,42 @@ class TestRegister:
         # Check response code
         assert response.status_code == 400
         assert response.json()["detail"] == "A user with this email already exists."
+
+    def test_workspace_created_on_user_registration(
+        self, client: TestClient, db_session: Session
+    ) -> None:
+        # Arrange
+        request_payload = {
+            "email": "testuser@example.com",
+            "password": "testuser",
+        }
+        # Act
+        response = client.post(
+            "/auth/register",
+            json=request_payload,
+        )
+
+        # Assert
+        # Check response code
+        assert response.status_code == 200
+
+        created_user: dict = response.json()
+
+        # Check workspace in db
+        workspace = db_session.execute(
+            select(Workspace).where(Workspace.owner_id == created_user["id"])
+        ).scalar()
+
+        assert workspace
+        assert workspace.name == "My Workspace"
+
+        # Check user has owned workspace
+        user = db_session.execute(
+            select(User).where(User.id == created_user["id"])
+        ).scalar()
+
+        assert user
+        assert user.owned_workspaces == [workspace]
 
 
 class TestLogin:
